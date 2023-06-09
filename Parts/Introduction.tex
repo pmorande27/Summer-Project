@@ -4,8 +4,8 @@
 \chapter{Introduction}
 
 
-\section{Brief Review of Classical Mechanics}x_a
-Let's condiser a system described by N generalized coordinates ($\{q\}$). Given two fixed endpoints $(t_a,t_b)$ such that $\{q(t_a)\}= \{q_a\}$ and $\{q(t_b)\} = \{q_b\}$ the action of the system is defined as:
+\section{Brief Review of Classical Mechanics}
+Let's consider a system described by N generalized coordinates ($\{q\}$). Given two fixed endpoints $(t_a,t_b)$ such that $\{q(t_a)\}= \{q_a\}$ and $\{q(t_b)\} = \{q_b\}$ the action of the system is defined as:
 \begin{equation}
     S[\{q(t)\}] \equiv \int_{t_a}^{t_b} \Lagr(\{q\},\{\dot q\},t) dt
     \label{eq:action}
@@ -54,5 +54,39 @@ Solving the differential equation and applying the boundary conditions $x(t_a) =
 \end{equation}
 $  S_{\text{C}}$ Stands for classical action, that is the action evaluated along the classical path (for which the action is stationary).
 
+\vspace{1mm}\noindent One of the strengths of this approach to classical mechanics compared to the Newtonian formalism is that the conservation laws are easy to obtain. At this stage, it is useful to introduce the canonical momenta. For a system described by N generalized coordinates, the canonical momenta $p_i$ with $1\leq i \leq N$ is defined as:
+\begin{equation}
+    p_i \equiv \frac{\partial \Lagr}{\partial \dot q_i}
+\end{equation}
+These quantities are important as they are the ones involved in conservation laws. If the Lagrangian of the system is independent of the coordinate $q_i$ then the conjugate momenta to that coordinate (that is $p_i$) will be conserved. This is just a trivial consequence of the Euler-Lagrange Equations:
+\begin{proof}
+    \begin{align}
+      \frac{d}{dt} \frac{\partial  \Lagr}{\partial \dot q_i} &=   \frac{\partial  \Lagr}{\partial q_i} = 0 \\
+      \frac{d}{dt} p_i &= 0 \\
+      p_i &= C
+\end{align}
+Where C is just a constant. Therefore $p_i$ is conserved (A constant of the motion)
+\end{proof}
+Another important conservation law arises when the Lagrangian of the system is independent of time, that is when $\frac{\partial\Lagr}{\partial t}=0$. In this case, the energy function is conserved. This object is defined as follows:
+\begin{equation}
+    h(\{q\},\{\dot q\},t) \equiv \sum_{i=1}^N \frac{\partial  \Lagr}{\partial \dot q_i}\dot q_i - \Lagr(\{q\},\{\dot q\},t)
+\end{equation}
+Its conservation is a consequence of the chain rule and of the Euler Lagrange Equation:
+\begin{proof}
+\begin{align}
+    \frac{d\Lagr}{dt} &= \sum_{i=1}^N\frac{\partial \Lagr}{\partial q_i}\dot q_i +  \sum_{i=1}^N\frac{\partial \Lagr}{\partial \dot q_i}\ddot q_i + \frac{\partial\Lagr}{\partial t}, \frac{\partial\Lagr}{\partial t}=0\\
+     \frac{d\Lagr}{dt} &= \sum_{i=1}^N\frac{\partial \Lagr}{\partial q_i}\dot q_i +  \sum_{i=1}^N\frac{\partial \Lagr}{\partial \dot q_i}\ddot q_i\\
+      \frac{d\Lagr}{dt} &= \sum_{i=1}^N\frac{d}{dt}\frac{\partial \Lagr}{\partial \dot q_i}\dot q_i +  \sum_{i=1}^N\frac{\partial \Lagr}{\partial \dot q_i}\ddot q_i \\
+         \frac{d\Lagr}{dt} &= \frac{d}{dt}\sum_{i=1}^N\left(\frac{\partial \Lagr}{\partial \dot q_i}\dot q_i\right)\\
+          0&=\frac{d}{dt}\left(\sum_{i=1}^N\left(\frac{\partial \Lagr}{\partial \dot q_i}\dot q_i\right) - \Lagr\right) \\
+          h &=C
+\end{align}
+Where C is just a constant. Therefore $h$ is conserved (A constant of the motion)
+\end{proof}
+\noindent It is important to remark on the connection between the energy function and the energy of the system. It is not hard to show that the energy function will coincide with the energy of the system (the sum of the kinetic energy and the potential energy) if and only if the kinetic energy is quadratic on the generalized velocities. The kinetic energy of the system is said to be quadratic on their velocities if it is possible to express it as follows: 
+\begin{equation}
+    T = \frac{1}{2}\sum_{i,j = 1}^N \dot q_i T_{ij} \dot q_j
+\end{equation}
+Where $T_{ij}$ is a $N\times N$ symmetric matrix that does whose entries do not depend on the velocities.
 \section{Classical Fields}
 \section{Introduction to Path integrals}
