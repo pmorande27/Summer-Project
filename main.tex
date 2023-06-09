@@ -1,13 +1,126 @@
-\documentclass{article}
-\usepackage{graphicx} % Required for inserting images
+% !TeX program = lualatex
+
+\documentclass[]{book}
+\usepackage[utf8]{inputenc}
+\usepackage{natbib}
+\usepackage{bibentry}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{float}
+\usepackage{amsthm}
+\setcitestyle{square}
+\usepackage{tikz}
+\usepackage{booktabs}
+\usepackage{enumerate}
+\usepackage{yhmath}
+\usepackage{chemformula}
+\usepackage{graphicx,wrapfig,lipsum}
+\usepackage{siunitx}
+\usepackage{pgfplots}
+\usepackage{epsf}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+ \usepackage{tabularx, booktabs, makecell, caption}
+ \usepackage{siunitx}
+\usepackage{hyperref}
+\usepackage[all]{hypcap}
+\usepackage{titlesec}
+\usepackage{physics}
+\usepackage{fullpage}
+
+\renewcommand{\figureautorefname}{\textbf{Fig.}}
+\renewcommand\qedsymbol{$\blacksquare$}
+\newcommand{\Hamiltonian}{\hat{H}}
+\newcommand{\Wavefunction}{\Psi(\underline{r},t)}
+\renewcommand{\Wavefunction}{\psi(\underline{r})}
+\newcommand{\positionProj}[3]{\int_{#1}^{#2} \ket{\underline{#3}}\bra{\underline{#3}}d#3}
+\newcommand{\Pstate}{\ket{\psi}}
+\newcommand{\pstate}{\ket{\psi}}
+\newcommand{\estate}{\ket{n}}
+\newcommand{\state}{\ket{u_i}}
+\newcommand{\disc}[2]{\text{D}(#1;#2)}
+\newcommand{\secondx}[1]{\frac{d^2#1}{dx^2}}
+\newcommand{\SE}{ \left(\frac{-\hbar^2}{2m}\nabla^2+V(r)\right)\Psi(r,t) = i\hbar\frac{\partial}{\partial t}\Psi(r,t)}
+\newcommand{\TISE}{ \left(\frac{-\hbar^2}{2m}\nabla^2+V(r)\right)u_n(r) =  E_n u_n(r)}
+\renewcommand{\laplacian}{\nabla^2}
+\renewcommand{\grad}{\underline{\nabla}}
+\renewcommand{\div}[1]{\grad\cdot\underline{#1}}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+\renewcommand{\Re}{\mathfrak{R}}
+\renewcommand{\Im}{\mathfrak{I}}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\newtheorem{definition}{Definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{claim}{Claim}
+\newtheorem*{theorem}{Theorem}
+\newtheorem*{property}{Property}
+\newtheorem{postulate}{Postulate}
+\renewcommand{\arraystretch}{1.2}
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\renewcommand{\figurename}{\textbf{Fig.}}
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
+\pgfplotsset{compat=1.18}
+\setcounter{secnumdepth}{4}
+
+
+\hypersetup{
+    colorlinks=false, %set true if you want colored links
+    linktoc=all,     %set to all if you want both sections and subsections linked
+    linkcolor=black,  %choose some color if you want links to stand out
+}
+
 
 \title{Summer Project}
-\author{s1976852 }
-\date{May 2023}
+\author{Pablo Morandé }
+\date{2023}
 
 \begin{document}
+\begin{titlepage}
+    \pagestyle{empty}                       % No numbers on title page      
+\begin{center}
+        \vspace*{1cm}
+            
+        \Huge
+        \textbf{Lattice Quantum Field Theory}
+            
+        \vspace{0.5cm}
+        \LARGE
+        Summer Project
+            
+        \vspace{1.5cm}
+            
+        \textbf{Pablo Morande}
+        \vspace{1.5cm}
 
-\maketitle
+
+            
+        \includegraphics[width=0.4\textwidth]{Images/Feynman_paths.png}
+        \vspace{1.5cm}
+
+        \Large
+        School of Physics And Astronomy\\
+        The University of Edinburgh\\
+        United Kingdom\\
+        2023
+            
+    \end{center}\end{titlepage}
+
+\pagestyle{plain} 
+\setcounter{page}{1}
+
+\chapter{Introduction}
+
 
 \section{Introduction}
 
