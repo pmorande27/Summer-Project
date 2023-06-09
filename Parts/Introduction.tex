@@ -1,0 +1,58 @@
+\pagestyle{plain} 
+\setcounter{page}{1}
+
+\chapter{Introduction}
+
+
+\section{Brief Review of Classical Mechanics}x_a
+Let's condiser a system described by N generalized coordinates ($\{q\}$). Given two fixed endpoints $(t_a,t_b)$ such that $\{q(t_a)\}= \{q_a\}$ and $\{q(t_b)\} = \{q_b\}$ the action of the system is defined as:
+\begin{equation}
+    S[\{q(t)\}] \equiv \int_{t_a}^{t_b} \Lagr(\{q\},\{\dot q\},t) dt
+    \label{eq:action}
+\end{equation}
+Where $\Lagr$ is the Lagrangian ($\Lagr$) of the system and is defined as:
+\begin{equation}
+    \Lagr \equiv T(\{q\},\{\dot q\},t) - V(\{q\},t)
+\end{equation}
+Where $T(\{q\},\{\dot q\},t), V(\{q\},t)$ are the usual Kinetic and Potential energies respectively (expressed in terms of the generalized coordinates and possibly time). It is important to note that this definition is only useful when the system of interest is not subject to time-dependent forces. In such cases, the potential energy term must be adapted such that the right equations of motion are obtained.
+
+\vspace{1mm}\noindent
+The action, of the system is a Functional, which is a mathematical object that given a function returns a number. In this case, the action needs to be fed a trajectory $\{q(t)\}$ so that the integral in Equation \ref{eq:action} can be integrated to produce a number.
+
+\vspace{1mm}\noindent
+Once these two objects have been introduced it is time to use them to obtain a formulation of classical mechanics. The key part is to introduce Hamilton's Principle
+\begin{definition} Hamilton's Principle:
+This principle establishes that given  a system described by N generalized coordinates, the path that the system will take will be such that makes the action stationary and that satisfies the boundary conditions at the specified endpoints $(t_a,t_b)$. That is we require that $\delta S =0$ for the classical path.
+\end{definition}
+\noindent It turns out that this condition is enough to obtain a set of equations of motion that describe the mechanics of the system. To obtain these equations we need to consider the change on the action under the coordinate change $\{q(t)\} \to \{q(t) + \epsilon(t)\}$ and then we impose that this change must be zero for the classical path:
+\begin{align}
+    \delta S &\equiv S[\{q(t)+ \epsilon(t) \}] - S[\{q(t) \}] \\
+    &= \int_{t_a}^{t_b} \Lagr(\{q+\epsilon(t)\},\{\dot q + \dot\epsilon(t)\},t) dt - \int_{t_a}^{t_b} \Lagr(\{q\},\{\dot q\},t) dt\\
+    &= \int_{t_a}^{t_b} \left(\frac{\partial  \Lagr}{\partial q_i} \epsilon_i + \frac{\partial  \Lagr}{\partial \dot q_i} \dot\epsilon_i\right)dt +O(\epsilon^2) =  \int_{t_a}^{t_b} \left(\frac{\partial  \Lagr}{\partial q_i}  -\frac{d}{dt} \frac{\partial  \Lagr}{\partial \dot q_i} \right) \epsilon_i dt
+\end{align}
+In the last line, we have integrated by parts and we have used that the endpoints are fixed for all paths (so $\{\epsilon(t_a)\} = \{\epsilon(t_b)\} = \{0\}$. We now impose the condition for the classical path, $\delta S= 0$
+\begin{align}
+    \int_{t_a}^{t_b} \left(\frac{\partial  \Lagr}{\partial q_i}  -\frac{d}{dt} \frac{\partial  \Lagr}{\partial \dot q_i} \right) \epsilon_i dt = 0
+\end{align}
+As this condition must hold for general (but small) $\{\epsilon(t)\}$ we find that the following equations must be satisfied for the classical path:
+\begin{equation}
+  \frac{d}{dt} \frac{\partial  \Lagr}{\partial \dot q_i} =   \frac{\partial  \Lagr}{\partial q_i} 
+\end{equation}
+Which are the Euler-Lagrange Equations of Motion.
+
+\vspace{1mm}\noindent \textbf{Example:} Free particle 
+
+
+\vspace{1mm}\noindent Let's examine the case of a 1-dimensional free particle under this formalism. The Lagrangian of the system is just $\Lagr = \frac{m}{2}\dot x^2$ as there is no potential energy term and only one degree of freedom. Therefore, the Euler-Lagrange Equation is:
+\begin{align}
+         \frac{d}{dt} \frac{\partial  \Lagr}{\partial \dot x} &=   \frac{\partial  \Lagr}{\partial x} \\
+         \ddot x &=0
+\end{align}
+Solving the differential equation and applying the boundary conditions $x(t_a) =x_a, x(t_b) = x_b$ gives the solution: $x(t) = \frac{x_b}{t_b-t_a}(t-t_a)+\frac{x_a}{t_b-t_a}(t_b-t) $. Which is the classical equation of motion. It is now possible to reintroduce into the Lagrangian to obtain the action of the classical path. Doing this and performing the integral gives:
+\begin{equation}
+    S_{\text{C}} = \frac{m}{2}\frac{(x_b-x_a)^2}{T}, T = t_b-t_a
+\end{equation}
+$  S_{\text{C}}$ Stands for classical action, that is the action evaluated along the classical path (for which the action is stationary)
+
+\section{Classical Fields}
+\section{Introduction to Path integrals}
