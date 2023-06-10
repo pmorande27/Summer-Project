@@ -88,5 +88,47 @@ Where C is just a constant. Therefore $h$ is conserved (A constant of the motion
     T = \frac{1}{2}\sum_{i,j = 1}^N \dot q_i T_{ij} \dot q_j
 \end{equation}
 Where $T_{ij}$ is a $N\times N$ symmetric matrix that does whose entries do not depend on the velocities.
+
+\vspace{1mm}\noindent At this stage it is perhaps useful to introduce the Hamiltonian of the system. The Hamiltonian of a system (with N degrees of freedom), which we denote as $\Ham$, is defined as follows:
+\begin{equation}
+    \Ham(\{q\},\{p\},t) \equiv \sum_{i=1}^{N} p_i \dot q_i - \Lagr(\{q\},\{\dot q\},t)
+\end{equation}
+It is important to notice that while the definition of the Hamiltonian of the system is exactly equivalent to the definition of the energy function $h$, the Hamiltonian is defined as a function of the generalized coordinates, time and the canonical momenta and not the generalized velocities. Therefore, defining the Hamiltonian of the system is not as straightforward as it might seem as we need to transform the quantities on the right-hand side such that they are expressed in terms of the variables that define the Hamiltonian, which are the Legendre Transformations.
+
+\vspace{1mm}\noindent \textbf{Example:} Hamiltonian of a particle in a spring. 
+
+\vspace{1mm}\noindent Let's consider the case a 1D system of a particle in a spring, in such case the Lagrangian of the system is given by
+\begin{equation}
+    \Lagr = \frac{m}{2}\dot x^2 - \frac{k}{2}x^2
+\end{equation}
+Where $x$ is the generalized coordinate of interest (displacement from the equilibrium position) and $k$ is the spring constant. The canonical momentum conjugate to $x$, is defined as $p = \frac{\partial\Lagr}{\dot x} = m\dot x$. We now start by writing the energy function of the system:
+\begin{equation}
+    h = \frac{m}{2}\dot x^2 + \frac{k}{2}x^2 
+\end{equation}
+We know just need to change the variables that appear in $h$ to get an expression of $H$ for this system. In particular, we need to get rid of all instances of $\dot x$. In this case, we just need to replace one and we do this using the definition of the canonical momentum: $\dot x = \frac{p}{m}$. Therefore, we obtain:
+\begin{equation}
+      \Ham(\{q\},\{p\},t) = \frac{p^2}{2m}  + \frac{k}{2}x^2 
+\end{equation}
+Which is the Hamiltonian of this system.
+
+\vspace{1mm}\noindent Now that we have defined the Hamiltonian of the system is time that we use its definition to obtain the equations of motion of the system. Let's consider a variation of the Hamiltonian $\Ham(\{q\},\{p\},t)$
+\begin{equation}
+    \delta H =\sum_{i=1}^N \left(\frac{\partial \Ham}{\partial q_i}\delta q_i + \frac{\partial \Ham}{\partial p_i}\delta p_i\right) + \frac{\partial \Ham}{\partial t}\delta t  
+    \label{eq:HamVar1}
+\end{equation}
+Which is just a trivial application of Taylor's theorem. However, let's apply this definition to the right-hand side:
+\begin{align}
+     \delta H &= \delta\left( \sum_{i=1}^{N} p_i \dot q_i - \Lagr(\{q\},\{\dot q\},t)\right)\\
+     &= \sum_{i=1}^{N} \left( p_i \delta \dot q_i + \dot q_i \delta p_i - \frac{\partial\Lagr}{\partial q_i}\delta q_i - \frac{\partial\Lagr}{\partial \dot q_i} \delta \dot q_i\right) - \frac{\partial \Lagr}{\partial t}\delta t\\
+      &=\sum_{i=1}^{N} \left(  \dot q_i \delta p_i - \dot p_i \delta  q_i\right) - \frac{\partial \Lagr}{\partial t}\delta t
+      \label{eq:HamVar2}
+\end{align}
+We now compare Equations \ref{eq:HamVar1} and \ref{eq:HamVar2} which must hold for arbitrary variations $\delta q_i,\delta p_i$ and we obtain Hamilton's Equation of Motion:
+\begin{align}
+    \dot q_i &= \frac{\partial \Ham}{\partial p_i}\\
+    \dot p_i &= -\frac{\partial H}{\partial q_i}\\
+    \frac{\partial \Lagr}{\partial t} &= -\frac{\partial H}{\partial t}
+\end{align}
+\section{Special Relativity Recap}
 \section{Classical Fields}
 \section{Introduction to Path integrals}
