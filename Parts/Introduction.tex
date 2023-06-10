@@ -129,6 +129,29 @@ We now compare Equations \ref{eq:HamVar1} and \ref{eq:HamVar2} which must hold f
     \dot p_i &= -\frac{\partial H}{\partial q_i}\\
     \frac{\partial \Lagr}{\partial t} &= -\frac{\partial H}{\partial t}
 \end{align}
+If we now consider a general function of the generalized coordinates and momenta such as $\mathcal{A}(\{q\},\{p\},t)$ its time evolution is given by:
+\begin{equation}
+    D
+    \label{eq:TimeEvClassical}
+\end{equation}
+It is now possible to express this in terms of the Hamiltonian of the system using Hamilton's Equations described above:
+\begin{equation}
+    \frac{d\mathcal{A}}{dt} = \sum_{i=1}^N \left(\frac{\partial\mathcal{A}}{\partial q_i}\frac{\partial \Ham}{\partial p_i} - \frac{\partial\mathcal{A}}{\partial p_i}\frac{\partial \Ham}{\partial q_i}\right) +\frac{\partial \mathcal{A}}{\partial t}
+\end{equation}
+It is possible to write this in an even more compact way if we introduce the Poisson Bracket. The Poisson Bracket is an object involving two functions of the Generalized coordinates and  momenta $\mathcal{A}(\{q\},\{p\},t)$, $\mathcal{B}(\{q\},\{p\},t)$ and is defined as follows:
+\begin{equation}
+    \{\mathcal{A},\mathcal{B}\}_{PB} = \sum_{i=1}^N\left((\frac{\partial\mathcal{A}}{\partial q_i}\frac{\partial \mathcal{B}}{\partial p_i} - \frac{\partial\mathcal{A}}{\partial p_i}\frac{\partial \mathcal{B}}{\partial q_i}\right)
+    \label{eq:PoissonBracketdef}
+\end{equation}
+Using the definition of the Poisson bracket the time evolution of a general function as described in Equation \ref{eq:TimeEvClassical} can be expressed as:
+\begin{equation}
+    \frac{d\mathcal{A}}{dt} =   \{\mathcal{A},\mathcal{\Ham}\}_{PB} +\frac{\partial \mathcal{A}}{\partial t}
+\end{equation}
+In particular, it is possible to express Hamilton's equations (two of them) using Poisson brackets:
+\begin{align}
+    \dot q_i = \{q_i,\Ham\}_{PB}\\
+    \dot p_i = \{p_i,\Ham\}_{PB}
+\end{align}
 \section{Special Relativity Recap}
 \section{Classical Fields}
 \section{Introduction to Path integrals}
