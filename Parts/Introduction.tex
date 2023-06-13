@@ -152,6 +152,74 @@ In particular, it is possible to express Hamilton's equations (two of them) usin
     \dot q_i = \{q_i,\Ham\}_{PB}\\
     \dot p_i = \{p_i,\Ham\}_{PB}
 \end{align}
+This concludes this short summary of the Lagrangian approach to Classical mechanics. As it turns out, this formulation is fundamental for understanding the Path integral formulation of Quantum Mechanics
 \section{Special Relativity Recap}
-\section{Classical Fields}
-\section{Introduction to Path integrals}
+Before starting to develop a Lagrangian approach to classical field theory it is fundamental to review the basic lingo of Special Relativity as it will be fundamental for the understanding of Electromagnetism.
+\subsection{Minkowski Space}
+Let's define an inertial observer. According to this observer, each event is specified by three spatial coordinates and time (fourth coordinate). We start by defining a set of three orthogonal basis vectors which define the Cartesian coordinates and a clock to measure time located at the origin. Therefore, the functions of the field $u$ depend on 4 variables: The four orthogonal coordinates ($x^1,x^2,x^3$) of a three-dimensional vector $\underline x = x^k e_k$ ($k=1,2,3$) and time t\footnote{We will use Latin indices when they start in 1 and Greek indices when we add the temporal component, so when they start at 0. Additionally, usual vectors will be underlined and four vectors will not}.
+
+\vspace{2mm}\noindent We define for convenience the new variable $x^0 = ct$. We then study the set of values $x^0,x^1,x^2,x^3$ as components of the vector x in a 4-dimensional linear space:
+\begin{equation}
+    x = x^\mu e_\mu
+    \label{eq:posvector}
+\end{equation}
+Given a four-dimensional linear space, we must now define a metric, which is a way of computing the scalar product between vectors of the space. We start by defining the scalar product of one vector by itself and then we generalize it for other vectors.
+\begin{equation}
+    x^2 \equiv x\cdot x = (x^0)^2-(x^1)^2-(x^2)^2-(x^3)^2 = ct^2 - \underline x^2
+    \label{eq:scalarprodpos1}
+\end{equation}
+If we now introduce the definition of the position vector of \ref{eq:posvector} into the definition of the scalar product we arrive to:
+\begin{equation}
+x^2 =  x^\mu e_\mu  x^\nu e_\nu =  x^\mu x^\nu  \cdot e_\mu  e_\nu = x^\mu x^\nu g_{\mu\nu}
+\label{eq:scalarprodpos2}
+\end{equation}
+In the last equality, we have introduced the metric tensor $g_{\mu\nu} = g_{\nu\mu} = e_\mu \cdot e_\nu $. From its definition, it is obvious that the metric tensor depends on the choice of basis. However, for this four-dimensional space and in Cartesian coordinates the metric tensor takes a simple form:
+\begin{equation}
+    g = \begin{pmatrix}
+1 & 0 & 0 & 0\\
+0 & -1 & 0 & 0\\
+0 & 0 & -1 & 0\\
+0 & 0 & 0 & -1\\
+\end{pmatrix}
+\end{equation}
+The values of the metric tensor ($g_{\mu\nu}$) can be read of by comparing the terms of Equations \ref{eq:scalarprodpos1} and \ref{eq:scalarprodpos2}. We can now extend the definition of the scalar product to two general vectors of this vector space $x,y$:
+\begin{equation}
+    x\cdot y = x^0y^0-x^1y^1-x^2y^2-x^3y^3 = x^\mu y^\nu g_{\mu\nu} 
+\end{equation}
+This particular four-dimensional linear vector space is known as Minkowski Space. 
+
+ \vspace{2mm}\noindent From a mathematical viewpoint, the fact that the speed of light is constant and equal to c in all reference frames translates to the invariance of Equation $\ref{eq:scalarprodpos1}$ under the linear coordinate transformation $x,y,z,t \to x',y',z',t'$ (moving from one reference frame to another one). If the new reference system moves with velocity $v$ with respect to the original one along the $x^1$ axis, then the correspondent coordinate transformation is:
+\begin{align}
+    (x^1)' &= \gamma(x^1-\beta x^0)\\
+    (x^2)' &= x^2\\
+    (x^3)' &= x^3\\
+    (x^0)' &= \gamma(x^0-\beta x^1), \beta = \frac{v}{c}\\
+    \gamma &= \frac{1}{\sqrt{1-\beta^2}}
+\end{align}
+\subsection{Lorentz Transformations}
+The transformations outlined above, which correspond from the translation of one inertial reference frame to another one, are only a particular instance of the general Lorentz transformations, that is the set of transformations for which the square of the four vector is invariant in the Minkowski space. We can now study the properties of these general transformations in more detail.
+
+\vspace{2mm}\noindent We start by considering a linear coordinate transformation. We translate from the original basis set $\{e_\mu\}$ to the new basis $\{e_\nu'\}$.  Therefore, the new coordinates $x'^\nu$ are related to the old ones $x^\mu$ by the linear relation:
+\begin{equation}
+    x'^\mu = A^\mu_\nu x^\nu
+\end{equation}
+Where $A$ is the general Lorentz transformation and $A^\mu_\nu$ are the components of the matrix. It is useful to express $A$ in its most general form:
+\begin{equation}
+    A =  \begin{pmatrix}A^0_0 & A^0_1 & A^0_2 & A^0_3\\
+A^1_0 & A^1_1 & A^1_2 & A^1_3\\
+A^2_0 & A^2_1 & A^2_2 & A^2_3\\
+A^3_0 & A^3_1 & A^3_2 & A^3_3\\
+\end{pmatrix}
+\end{equation}
+Given that this just represents a change of basis, the abstract vector is unchanged and can be represented in any of the two bases, that is:
+\begin{equation}
+    x = x^\nu e_\nu = x'^\mu e'_\mu
+\end{equation}
+We can use this to obtain a linear relationship between the basis vectors:
+\begin{align}
+    x &=  x^\nu e_\nu = x'^\mu e'_\mu\\
+     x'^\mu e'_\mu &=  A^\mu_\nu x^\nu  e'_\mu \\ 
+    x^\nu e_\nu &=  A^\mu_\nu x^\nu  e'_\mu\\
+     e_\nu &=  A^\mu_\nu e'_\mu
+\end{align}
+\section{Classical Field Theory}
