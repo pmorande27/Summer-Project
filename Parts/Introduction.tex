@@ -1,7 +1,7 @@
 \pagestyle{plain} 
 \setcounter{page}{1}
 
-\chapter{Introduction}
+\chapter{Preliminaries}
 
 
 \section{Brief Review of Classical Mechanics}
@@ -131,7 +131,7 @@ We now compare Equations \ref{eq:HamVar1} and \ref{eq:HamVar2} which must hold f
 \end{align}
 If we now consider a general function of the generalized coordinates and momenta such as $\mathcal{A}(\{q\},\{p\},t)$ its time evolution is given by:
 \begin{equation}
-    D
+     \frac{d\mathcal{A}}{dt} =\sum_{i=1}^N \left(\frac{\partial\mathcal{A}}{\partial q_i}\frac{dq_i}{d t}  +\frac{\partial\mathcal{A}}{\partial p_i}\frac{dp_i}{dt}\right) +\frac{\partial \mathcal{A}}{\partial t}
     \label{eq:TimeEvClassical}
 \end{equation}
 It is now possible to express this in terms of the Hamiltonian of the system using Hamilton's Equations described above:
@@ -186,6 +186,9 @@ The values of the metric tensor ($g_{\mu\nu}$) can be read of by comparing the t
 \begin{equation}
     x\cdot y = x^0y^0-x^1y^1-x^2y^2-x^3y^3 = x^\mu y^\nu g_{\mu\nu} 
 \end{equation}
+We call $x^\mu$ the contravariant components of the vector (upper index), it is possible to define the covariant components of a vector (lower index) through the metric, that is $x_\mu \equiv g_{\mu\nu}x^\nu$ such that $x^2 =  x^\mu x^\nu g_{\mu\nu} = x^\mu x_\mu$. Given the explicit form of $g_{\mu\nu}$ we can assign a simple value to each covariant component, that is: $x_0 = x^0, x_1 = -x^1, x_2 = -x^2, x_3 = - x^3$. At this stage it is useful to introduce the inverse of the metric $g^{-1}$, it is the convention to denote its elements as $g^{\mu \nu}$ such that $g_{\nu\sigma}g^{\sigma \nu} = \delta^\nu_\mu$
+
+\vspace{2mm}\noindent
 This particular four-dimensional linear vector space is known as Minkowski Space. 
 
  \vspace{2mm}\noindent From a mathematical viewpoint, the fact that the speed of light is constant and equal to c in all reference frames translates to the invariance of Equation $\ref{eq:scalarprodpos1}$ under the linear coordinate transformation $x,y,z,t \to x',y',z',t'$ (moving from one reference frame to another one). If the new reference system moves with velocity $v$ with respect to the original one along the $x^1$ axis, then the correspondent coordinate transformation is:
@@ -222,4 +225,76 @@ We can use this to obtain a linear relationship between the basis vectors:
     x^\nu e_\nu &=  A^\mu_\nu x^\nu  e'_\mu\\
      e_\nu &=  A^\mu_\nu e'_\mu
 \end{align}
-\section{Classical Field Theory}
+This relation can easily be inverted giving $ e'_\mu=  (A^{-1})^\nu_\mu   e_\nu $ We can now impose the condition that the square of a vector $x$ in this space is invariant under these transformations (scalar):
+\begin{align}
+    A^\mu_\nu A^\lambda_\rho g_{\mu\lambda}x^\nu x^\rho &= x^\nu x\rho g_{\nu\rho}\\
+    ( A^\mu_\nu A^\lambda_\rho g_{\mu\lambda}- g_{\nu\rho}) x^\nu x^\rho &= 0, \forall x \\
+      A^\mu_\nu g_{\mu\lambda}  A^\lambda_\rho &= g_{\nu\rho}
+      \label{eq:metric_inv}
+\end{align}
+The last equation implies that $g$ goes no transform when we change to a new set of coordinates in this space. This is just a consequence of the invariance of $x^2$. If we now multiply Equation \ref{eq:metric_inv} by the contravariant metric tensor $g^{\nu\sigma}$ we obtain:
+\begin{align}
+    A^\mu_\nu  g_{\mu\lambda}  A^\lambda_\rho  g^{\nu\sigma} &= \delta^\sigma_\rho \\
+    \left( A^\mu_\nu  g_{\mu\lambda}  g^{\nu\sigma}\right)  A^\lambda_\rho&= \delta^\sigma_\rho \\
+    B^\sigma_\lambda  A^\lambda_\rho &=  \delta^\sigma_\rho
+\end{align}
+Therefore, the Matrix $B$ with elements $ B^\sigma_\lambda  = A^\mu_\nu  g_{\mu\lambda}  g^{\nu\sigma} $ is the inverse of the general Lorentz transformation $A$. As we have an explicit expression for the elements of B in terms of the metric tensor and the general transformation it is possible to express B in matrix form:
+\begin{equation}
+    B= \begin{pmatrix}
+        A^0_0 & -A^1_0& -A^2_0 & -A^3_0\\
+-A^0_1 & A^1_1 & A^2_1 & A^3_1\\
+-A^0_2 & A^1_2 & A^2_2 & A^3_2\\
+-A^0_3 & A^1_3 & A^2_3 & A^3_3\\
+    \end{pmatrix}
+\end{equation}
+Therefore, to obtain the inverse matrix of A we need to transpose A and then change the sign successively of the first sign and the first column. From now we will denote $B$ as $A^{-1}$. We can use this matrix to examine the properties of the determinant of $A$.
+\begin{align}
+    det(AA^{-1}) &= det(I) = 1 \\
+     det(AA^{-1}) &= det(A)det(A^{-1}) \\
+      det(A)det(A^{-1})  &= 1
+\end{align}
+On the other hand, given that $A^{-1}$ is formed by the transposition (which does not affect the determinant) of matrix $A$ and the successive change of sign of the first row (adds a minus sign to the determinant) and first column (adds a second minus sign that cancels the first), the determinant of the inverse Lorentz transformation is the same as the determinant of the transformation itself. $det(A^{-1}) = det(A)$. Therefore we have the condition:
+\begin{equation}
+    det(A)^2 = 1
+\end{equation}
+This has two solutions: $det(A) =1$ or $det(A) = -1$. Additionally, we can look to Equation \ref{eq:metric_inv} for the particular case $\nu=\rho=0$ for which we obtain:
+\begin{equation}
+    A^\mu_0 g_{\mu\lambda}  A^\lambda_0 = 1
+\end{equation}
+Which if written explicitly gives:
+\begin{equation}
+    (A^0_0)^2 = 1 = (A^1_0)^2 + (A^2_0)^2 + (A^3_0)^2 \geq 1
+\end{equation}
+Meaning that either $A^0_0 \geq 1$ or $A^0_0\leq -1$. Combining these two options with the two possibilities of the determinant we obtain 4 categories. Therefore, the set of general Lorentz transformations is divided into four sets of transformations in the function of the sign of $A^0_0$ and of the determinant of $A$.
+\begin{center}
+  \begin{tabular}{ccccc}
+    \toprule
+      &$L^\uparrow_+$ & $L^\downarrow_+$ &$L^\uparrow_-$&$L^\downarrow_+$  \\ \midrule
+     $A^0_0$& $\geq 1$ & $\leq -1$ & $\geq 1$ & $\leq -1$ \\
+     $det(A)$ & $1$ &$1$ & $-1$& $-1$\\
+     \bottomrule
+\end{tabular}  
+\end{center}
+
+\subsection{Specific 4-Vectors}
+It is now useful to introduce some of the relevant 4 vectors (elements of the Minkowski space). The first and most obvious one is the four position $x$, with elements $x^\mu$. Another relevant 4 vector is the 4 momentum $p$, which has elements $p^u = (\frac{E}{c},\underline p)$. Where E is the Energy of the particle and $\underline p$ is the spatial three momentum. It is important to note that square of the 4 momentum satisfies:
+\begin{equation}
+    p^2 = p^\mu p_\mu = m^2c^2
+\end{equation}
+This leads to the famous Energy momentum relation:
+\begin{align}
+    p^2 &= m^2c^2\\
+    \frac{E^2}{c^2} - \underline p^2 &= m^2c^2\\
+    E^2 &= c^2\underline p^2 +m^2c^4
+\end{align}
+For the special case $\underline p = 0$ it leads to the popular Equation $E= mc^2$.
+
+\vspace{2mm}\noindent In addition, to these two four vectors, it is useful to introduce the vector operator (transforms as a four-vector) which has elements $\partial^\mu = (\frac{1}{c}\frac{\partial}{\partial t}, -\underline\nabla)$. On the other hand, its covariant components are $\partial_\mu = (\frac{1}{c}\frac{\partial}{\partial t}, \underline \nabla)$. It is also possible to define the scalar operator known as the D'Alembert operator>
+\begin{equation}
+    \partial^2 = \frac{1}{c^2}\partial^\mu \partial_\mu = \frac{\partial^2}{\partial t^2} - \nabla^2  = \Box^2
+\end{equation}
+Sometimes the D'Alembert operator is denoted just as $\Box$ without the $^2$. If a field satisfies the equation $\partial^2 f =0$ then we arrive at a wave equation for the field (wave travelling at the speed of light):
+\begin{equation}
+    \frac{1}{c^2}\frac{\partial^2 f}{\partial t^2} = \nabla^2 f
+\end{equation}
+\section{Group Theory}
