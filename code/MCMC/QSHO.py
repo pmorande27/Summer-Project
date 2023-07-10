@@ -24,7 +24,8 @@ class Lattice(object):
             candidate = self.lattice[pos] + delta
             next_pos = (pos+1)%(self.N)
             pre_pos = (pos-1)%(self.N)
-            dS = 1/2* ((self.lattice[next_pos]-candidate)**2/self.a) + 1/2 *((candidate-self.lattice[pre_pos])**2/self.a) -1/2 *((self.lattice[next_pos]-self.lattice[pos])**2/self.a) -1/2* ((self.lattice[pos]-self.lattice[pre_pos])**2/self.a) + self.a*1/8 *(self.lattice[next_pos]+candidate)**2 +self.a*1/8 *(candidate+self.lattice[pre_pos])**2-self.a*1/8 *(self.lattice[next_pos]+self.lattice[pos])**2-self.a*1/8 *(self.lattice[pre_pos]+self.lattice[pos])**2
+            dS = (1/(2*self.a)*( (self.lattice[next_pos]-candidate)**2 + (candidate-self.lattice[pre_pos])**2 -(self.lattice[next_pos]-self.lattice[pos])**2 -(self.lattice[pos]-self.lattice[pre_pos])**2 )+ 
+            self.a*1/8* ( (self.lattice[next_pos]+candidate)**2 + (candidate+self.lattice[pre_pos])**2-(self.lattice[next_pos]+self.lattice[pos])**2- (self.lattice[pre_pos]+self.lattice[pos])**2))
             probs = random.random()
             if probs < min(1,np.exp(-dS)):
                 self.lattice[pos] = candidate
@@ -50,7 +51,11 @@ class Lattice(object):
 def main():
     N = 16
     a = 0.3125
-    lat = Lattice(N=N,a=a,N_thermal=100,N_mc=10**5,N_correlation=3,Delta=1)
+    N_mc = 10**6
+    N_correlation = 3
+    N_thermal = 10**3
+    Delta = 1
+    lat = Lattice(N=N,a=a,N_thermal=N_thermal,N_mc=N_mc,N_correlation=N_correlation,Delta=Delta)
     means,times = lat.measure_twopoint()
     
     ts = np.linspace(start=0,stop=N*a)
@@ -59,3 +64,4 @@ def main():
     plt.plot(ts,corr)
     plt.show()
 main()
+
