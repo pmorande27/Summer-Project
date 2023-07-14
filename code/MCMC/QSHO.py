@@ -2,7 +2,7 @@ import numpy as np
 import random 
 import matplotlib.pyplot as plt
 def analytic(t, N, e):
-    return 1/2*( np.exp(-t)+np.exp(t)*np.exp(-N*e))
+    return 1/2*( np.exp(-t)+np.exp(t)*np.exp(-N))
 
 
 class Lattice(object):
@@ -34,7 +34,7 @@ class Lattice(object):
             probs = random.random()
             if probs < min(1, np.exp(-dS)):
                 self.lattice[pos] = candidate
-                #self.accepted += 1
+                self.accepted += 1
 
     def thermalize(self):
 
@@ -49,13 +49,14 @@ class Lattice(object):
 
         for i in range(self.N_mc):
             self.sweep()
+            print(i)
             if self.sweeps % self.N_correlation == 0:
                 for i in range(len(positions)):
                     values[i] += [self.lattice[0]*self.lattice[positions[i]]]
             self.sweeps+=1
 
         means = [np.mean(value) for value in values] + [np.mean(values[0])]
-        times = [self.a*position for position in positions] + [self.a*self.N]
+        times = [position for position in positions] + [self.N]
 
         return means,times
     
@@ -73,7 +74,7 @@ class Lattice(object):
             self.sweeps+=1
 
         means = [np.mean(value) for value in values] + [np.mean(values[0])]
-        times = [self.a*n for n in range(self.N)] + [self.a*self.N]
+        times = [self.a*n for n in range(self.N)] + [self.N]
 
         return means,times
 
@@ -89,23 +90,23 @@ class Lattice(object):
 
 
 def main():
-    N = 100
-    a = 0.05
-    N_mc = 10**6
-    N_correlation = 20
-    N_thermal = 200
-    Delta = 1.4
+    N = 100*2
+    a = 0.1
+    N_mc = 10**5*2
+    N_correlation = int(1/a**2)
+    N_thermal = N_correlation*10
+    Delta = 1
     lat = Lattice(N = N, a = a, N_thermal = N_thermal, N_mc = N_mc, N_correlation = N_correlation, Delta = Delta)
 
-    means,times = lat.measure_greens()
+    means,times = lat.measure_twopoint()
     
-    ts = np.linspace(start = 0, stop = N*a)
+    ts = np.linspace(start = 0, stop = N)
     corr = [analytic(t, N, a) for t in ts]
-    #plt.plot(times, means, 'o')
-    #plt.plot(ts, corr)
-    DE = [abs(np.log(means[i]/means[i+1])/a) for i in range(0,N-1)]
-    plt.plot([j for j in range(len(DE))],DE,'o')
-    plt.ylim(0,2)
+    plt.plot(times, means, 'o')
+    plt.plot(ts, corr)
+    #DE = [abs(np.log(means[i]/means[i+1])/a) for i in range(0,N-1)]
+    #plt.plot([j for j in range(len(DE))],DE,'o')
+    #plt.ylim(0,2)
     plt.show()
 
     #values, times = lat.measure_acceptance()
