@@ -12,9 +12,8 @@ def main():
     print("Number of sweeps before Correlation: " + str(Ncorr))
 
     l = Lattice(8, 5.5, 100, 0.24, 10, Nmeasure, Ncorr)
-    avg = l.measure()
-    err = sem(avg)
-    print(np.average(avg),err)
+    avg = l.measure_two()
+    print(avg)
     
 
 class Lattice(object):
@@ -217,4 +216,59 @@ class Lattice(object):
                 print(j)
             results[i] = self.action()
         return(results)
+    
+    def obtain_spatial_loops(self, t):
+        WL =0
+
+        for x in range(self.N_x):
+
+            for y in range(self.N_y):
+
+                for z in range(self.N_z):
+                     
+                    N =self.N 
+
+                    incmi, incni =np.zeros((4),'int'), np.zeros((4),'int')
+                     
+                    position = np.array([t, x, y, z])
+                    for mi in range(1, 4):
+
+                        incmi[mi] = 1 
+                        pos_one = (position + incmi) %N
+                        for ni in range(1,mi):
+                            incni[ni]=1 
+                   
+                            pos_two = (position + incni) %N 
+
+                            incni[ni]=0
+                
+                            WL+=np.trace(np.dot(self.U[tuple(position)+(mi,)],np.dot(np.dot(self.U[tuple(pos_one)+(ni,)],self.dagger(self.U[tuple(pos_two)+(mi,)])),self.dagger(self.U[tuple(position)+(ni,)]))))
+                
+                        incmi[mi]=0
+
+
+
+        return (np.real(WL)/(3.*3))/self.N**3
+    
+
+    def measure_at_diff_times(self):
+
+        results = [0 for i in range(self.N_t)]
+
+        for t in range(self.N_t):
+            results[t] = self.obtain_spatial_loops(t)
+        
+        return results
+    
+
+    def measure_two(self):
+        results = [0 for i in range(self.N_measurements)]
+        for i in range(self.N_measurements):
+            
+            for j in range(self.N_corr):
+                self.sweep()
+                print(j)
+            results[i] = self.measure_at_diff_times()
+        return(results)
+
 main()
