@@ -77,23 +77,27 @@ class Ising(object):
         return(results)
     
     def autocorrelation(self, observable):
-        steps = [i for i in range(11)]
+        steps = [i for i in range(20)]
         measurements = [0 for i in range(self.N_measurement)]
         for i in range(self.N_measurement):
             print(i)
             self.sweep()
             measurements[i] = observable(self.lattice)
-        results = [0 for i in range(11)]
+            average = np.average(measurements)
+            average_of_sq = np.average([m**2 for m in measurements])
+        results = [0 for i in range(20)]
         for step in steps:
             result = 0
             for i in range(self.N_measurement-step):
-                result += measurements[i] * measurements[i+step]
-            result = (result/(self.N_measurement-step) -np.average(measurements)**2)/ (np.average([m**2 for m in measurements])-np.average(measurements)**2)
+                result += (measurements[i]-average)*(measurements[i+step]-average)
+            result = (result/(self.N_measurement-step))/ (np.average([m**2 for m in measurements])-np.average(measurements)**2)
             results[step] = result 
+        plt.plot(results)
+        plt.show()
         return results
         
 def main():
-    lat = Ising(N=20,kT=100000,N_thermal=100,N_measuremnt=2*1000,N_sweeps=1)
+    lat = Ising(N=20,kT=1,N_thermal=100,N_measuremnt=1000,N_sweeps=1)
     print(lat.autocorrelation(Ising.get_magnetisation))
     
 main()
