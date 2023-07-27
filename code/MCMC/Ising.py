@@ -83,21 +83,23 @@ class Ising(object):
             print(i)
             self.sweep()
             measurements[i] = observable(self.lattice)
-            average = np.average(measurements)
-            average_of_sq = np.average([m**2 for m in measurements])
+        average = np.average(measurements)
+        average_of_sq = np.average([m**2 for m in measurements])
+        sigma_sq = (average_of_sq-average**2)
+        print(sigma_sq)
+        print(measurements)
         results = [0 for i in range(20)]
         for step in steps:
             result = 0
             for i in range(self.N_measurement-step):
                 result += (measurements[i]-average)*(measurements[i+step]-average)
-            result = (result/(self.N_measurement-step))/ (np.average([m**2 for m in measurements])-np.average(measurements)**2)
+            result = (result/(self.N_measurement-step))/ sigma_sq
             results[step] = result 
-        plt.plot(results)
+        plt.plot(results,'o')
         plt.show()
         return results
         
 def main():
-    lat = Ising(N=20,kT=1,N_thermal=100,N_measuremnt=1000,N_sweeps=1)
-    print(lat.autocorrelation(Ising.get_magnetisation))
-    
+    lat = Ising(N=50,kT=7,N_thermal=100,N_measuremnt=1000,N_sweeps=1)
+    print(lat.autocorrelation(Ising.get_energy))
 main()
