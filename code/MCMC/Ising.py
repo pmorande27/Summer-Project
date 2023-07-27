@@ -26,9 +26,9 @@ class Ising(object):
         return str(self.lattice)
     
     def sweep(self):
-        for i in range(self.N):
-            for j in range(self.N):
-
+        for x in range(self.N):
+            for y in range(self.N):
+                i,j = np.random.randint(0,self.N), np.random.randint(0,self.N)
                 spin_i = self.lattice[i,j] #initial spin
                 spin_f = spin_i*-1 #proposed spin flip
             # compute change in energy
@@ -76,9 +76,24 @@ class Ising(object):
             results[i] = observable(self.lattice)
         return(results)
     
-
+    def autocorrelation(self, observable):
+        steps = [i for i in range(11)]
+        measurements = [0 for i in range(self.N_measurement)]
+        for i in range(self.N_measurement):
+            print(i)
+            self.sweep()
+            measurements[i] = observable(self.lattice)
+        results = [0 for i in range(11)]
+        for step in steps:
+            result = 0
+            for i in range(self.N_measurement-step):
+                result += measurements[i] * measurements[i+step]
+            result = (result/(self.N_measurement-step) -np.average(measurements)**2)/ (np.average([m**2 for m in measurements])-np.average(measurements)**2)
+            results[step] = result 
+        return results
+        
 def main():
-    lat = Ising(N=100,kT=10,N_thermal=100,N_measuremnt=10000,N_sweeps=1)
-    print(np.average(lat.measurement(Ising.get_magnetisation)))
+    lat = Ising(N=20,kT=100000,N_thermal=100,N_measuremnt=2*1000,N_sweeps=1)
+    print(lat.autocorrelation(Ising.get_magnetisation))
     
 main()
