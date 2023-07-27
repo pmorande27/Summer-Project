@@ -58,8 +58,8 @@ class Gaussian(object):
         plt.show()
         return results
 def main():
-    Gauss = Gaussian(epsilon=1.5,N_thermal=100,N_measurment=100000,N_sweeps=10)
-    print(np.average(Gauss.autocorrelation(lambda x: x)))
+    Gauss = Gaussian(epsilon=3,N_thermal=100,N_measurment=100000,N_sweeps=10)
+    print(Gauss.autocorrelation(lambda x: x))
 main()
 
 
