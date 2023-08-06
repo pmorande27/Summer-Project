@@ -1,10 +1,5 @@
-import math
-import random
 import matplotlib.pyplot as plt
-import seaborn as sns
 import numpy as np
-from scipy import rand
-import matplotlib.animation as animation
 
 class Gaussian(object):
     def __init__(self,epsilon, N_thermal, N_measurment, N_sweeps) -> None:
