@@ -33,9 +33,7 @@ class Gaussian(object):
         xprime = self.lattice + deltaX
     
         Delta_S = Gaussian.s(xprime)-Gaussian.s(self.lattice)
-    
-        r = random.random()
-    
+        
         if Delta_S <0 or np.exp(-Delta_S) > np.random.uniform(0,1):
     
             self.lattice = xprime
@@ -55,9 +53,7 @@ class Gaussian(object):
             for j in range(self.N_sweeps):
     
                 self.sweep()
-    
-            print(i)
-    
+        
             results[i] = observable(self.lattice)
     
         return(results)
@@ -97,10 +93,6 @@ class Gaussian(object):
             result = (result/(self.N_measurement-step))/ sigma_sq
     
             results[step] = result 
-    
-        plt.plot(results,'o')
-    
-        plt.show()
     
         return results
 
