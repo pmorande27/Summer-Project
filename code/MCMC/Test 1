@@ -1,0 +1,9 @@
+########################
+Description:
+The lattice has 8**4 sites and beta is chosen to be 5.5 in this simulation
+100 sweeps have been at the beginning to thermalize the lattice
+10 Configurations of the lattice have been saved
+25 sweeps have been performed between each saved configuration to minimize the autocorrelation
+Each link is updated 10 times each time that it is selected
+The parameter that controls the deviation form the identity matrix of the random SU(3) elements has been 0.24 in this simulation and 100 random SU(3) matrices have been generated
+########################

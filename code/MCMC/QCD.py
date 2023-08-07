@@ -7,22 +7,30 @@ from scipy.stats import sem
 def main():
     Nmeasure = 10
     Ncorr = 25
+    N = 8
+    beta = 5.5
+    N_matrix = 100
+    epsilon = 0.24
+    hits = 10
+    N_thermal = 100
     
     print("Number of Measurments: "+ str(Nmeasure))
     print("Number of sweeps before Correlation: " + str(Ncorr))
 
-    l = Lattice(8, 5.5, 100, 0.24, 10, Nmeasure, Ncorr)
-    avg = l.measure_two()
-    print(avg)
+    l = Lattice(N, beta, N_matrix, epsilon, hits, Nmeasure, Ncorr, N_thermal)
+    avg = l.generate_configurations()
+    Lattice.save_results(N,beta,N_thermal,Nmeasure,Ncorr,hits,epsilon,N_matrix,avg, 'Test 2')
     
 
 class Lattice(object):
 
-    def __init__(self,N,beta,Nmatrix,epsilon, hits, N_measruements, N_corr) -> None:
+    def __init__(self,N,beta,Nmatrix,epsilon, hits, N_measruements, N_corr,N_themral) -> None:
 
         self.N,self.N_x,self.N_y,self.N_z,self.N_t = N, N, N, N, N
 
-        self.Nmatrix, self.beta, self.epsilon, self.hits = Nmatrix, beta, epsilon, hits
+        
+
+        self.Nmatrix, self.beta, self.epsilon, self.hits, self.N_thermal = Nmatrix, beta, epsilon, hits, N_themral
 
         self.N_measurements, self.N_corr = N_measruements, N_corr
     
@@ -49,17 +57,6 @@ class Lattice(object):
         
         self.thermalize()
 
-    def dagger(self,D):
-
-        N = len(D)
-
-        H = np.zeros((N, N), dtype=complex)
-
-        R=np.matrix(D)
-
-        H=R.getH()
-
-        return H.copy()
     
 
     def generte_random_matrix(self):
@@ -78,7 +75,7 @@ class Lattice(object):
 
                     H[j,i]=complex(np.random.uniform(-1, 1), np.random.uniform(-1, 1))
 
-            H=(H.copy()+self.dagger(H.copy()))/2. #generation o the hermitian matrice
+            H=(H.copy()+Lattice.dagger(H.copy()))/2. #generation o the hermitian matrice
 
             for n in range(30): #Taylor series for a SU(3) mstrice
 
@@ -86,7 +83,7 @@ class Lattice(object):
 
             self.M[s] = self.M[s]/np.linalg.det(self.M[s])**(1/3) #Unitarization
 
-            self.M[s + self.Nmatrix] = self.dagger(self.M[s]) #Saving the inverse
+            self.M[s + self.Nmatrix] = Lattice.dagger(self.M[s]) #Saving the inverse
 
     def calculate_gamma(self, position_link):
 
@@ -118,9 +115,9 @@ class Lattice(object):
 
                 inc_ni[ni] = 0
 
-                gamma+= np.dot(np.dot(self.U[tuple(position_one)+(ni,)],self.dagger(self.U[tuple(position_two)+(ro,)])),self.dagger(self.U[t,x,y,z,ni])) \
+                gamma+= np.dot(np.dot(self.U[tuple(position_one)+(ni,)],Lattice.dagger(self.U[tuple(position_two)+(ro,)])),Lattice.dagger(self.U[t,x,y,z,ni])) \
                         \
-                        +np.dot(np.dot(self.dagger(self.U[tuple(position_three)+(ni,)]),self.dagger(self.U[tuple(position_four)+(ro,)])),self.U[tuple(position_four)+(ni,)])
+                        +np.dot(np.dot(Lattice.dagger(self.U[tuple(position_three)+(ni,)]),Lattice.dagger(self.U[tuple(position_four)+(ro,)])),self.U[tuple(position_four)+(ni,)])
        
         return gamma.copy()
     
@@ -154,9 +151,31 @@ class Lattice(object):
 
                                     self.U[t,x,y,z,u] = Delta_U.copy()
 
-    def get_plaquette(self,t,x,y,z):
+    def thermalize(self):
 
-        N, WL =self.N, 0
+        for i in range(self.N_thermal):
+
+            self.sweep()
+
+            print(i)
+
+            print(Lattice.average_plaquette(self.U))
+
+    def generate_configurations(self):
+        results = [0 for i in range(self.N_measurements)]
+        for i in range(self.N_measurements):
+            
+            for j in range(self.N_corr):
+                self.sweep()
+                print(j)
+            results[i] = self.U.copy()
+        return(results)
+    @staticmethod
+    def get_plaquette(t,x,y,z, U):
+
+        N, WL =len(U), 0
+
+        
 
         incmi, incni =np.zeros((4),'int'), np.zeros((4),'int')
 
@@ -174,50 +193,61 @@ class Lattice(object):
 
                 incni[ni]=0
             
-                WL+=np.trace(np.dot(self.U[tuple(position)+(mi,)],np.dot(np.dot(self.U[tuple(pos_one)+(ni,)],self.dagger(self.U[tuple(pos_two)+(mi,)])),self.dagger(self.U[tuple(position)+(ni,)]))))
+                WL+=np.trace(np.dot(U[tuple(position)+(mi,)],np.dot(np.dot(U[tuple(pos_one)+(ni,)],Lattice.dagger(U[tuple(pos_two)+(mi,)])),Lattice.dagger(U[tuple(position)+(ni,)]))))
             
             incmi[mi]=0
 
         return np.real(WL)/(3.*6.)
 
 
-    def action(self):
-
+    @staticmethod
+    def average_plaquette(lattice):
+        N = len(lattice)
         result =0
 
-        for t in range(self.N_t):
+        for t in range(N):
 
-            for x in range(self.N_x):
+            for x in range(N):
 
-                for y in range(self.N_y):
+                for y in range(N):
 
-                    for z in range(self.N_z):
+                    for z in range(N):
                             
-                            result += self.get_plaquette(t, x, y, z)
+                            result += Lattice.get_plaquette(t, x, y, z, lattice)
 
-        return (result)/(self.N**4)
+        return (result)/(N**4)
 
-    def thermalize(self):
+    @staticmethod
+    def dagger(D):
 
-        for i in range(100):
+        N = len(D)
 
-            self.sweep()
+        H = np.zeros((N, N), dtype=complex)
 
-            print(i)
+        R=np.matrix(D)
 
-            print(self.action())
+        H=R.getH()
 
-    def measure(self):
-        results = [0 for i in range(self.N_measurements)]
-        for i in range(self.N_measurements):
-            
-            for j in range(self.N_corr):
-                self.sweep()
-                print(j)
-            results[i] = self.action()
-        return(results)
+        return H.copy()
     
-    def obtain_spatial_loops(self, t):
+    @staticmethod
+    def save_results(N, beta, N_thermal, N_meausre, N_correlation, hits, epsilon, N_matrix, lattices, file_name):
+        file = open(file_name,'a')
+        file.write("########################"+ '\n')
+        file.write("Description:" + '\n')
+        file.write('The lattice has '+ str(N)+'**4 sites and beta is chosen to be ' + str(beta) + ' in this simulation'+ '\n')
+        file.write(str(N_thermal) + ' sweeps have been at the beginning to thermalize the lattice'+ '\n')
+        file.write(str(N_meausre) + ' Configurations of the lattice have been saved'+ '\n')
+        file.write(str(N_correlation)+ ' sweeps have been performed between each saved configuration to minimize the autocorrelation'+ '\n')
+        file.write('Each link is updated '+ str(hits) +' times each time that it is selected'+ '\n')
+        file.write('The parameter that controls the deviation form the identity matrix of the random SU(3) elements has been ' + str(epsilon) + ' in this simulation and ' + str(N_matrix) + ' random SU(3) matrices have been generated'+ '\n')
+        file.write("########################"+ '\n')
+        file.close()
+        np.save(file_name,lattices)
+     
+    
+    
+    """def obtain_spatial_loops(self, t):
         WL =0
 
         for x in range(self.N_x):
@@ -242,7 +272,7 @@ class Lattice(object):
 
                             incni[ni]=0
                 
-                            WL+=np.trace(np.dot(self.U[tuple(position)+(mi,)],np.dot(np.dot(self.U[tuple(pos_one)+(ni,)],self.dagger(self.U[tuple(pos_two)+(mi,)])),self.dagger(self.U[tuple(position)+(ni,)]))))
+                            WL+=np.trace(np.dot(self.U[tuple(position)+(mi,)],np.dot(np.dot(self.U[tuple(pos_one)+(ni,)],Lattice.dagger(self.U[tuple(pos_two)+(mi,)])),Lattice.dagger(self.U[tuple(position)+(ni,)]))))
                 
                         incmi[mi]=0
 
@@ -269,6 +299,5 @@ class Lattice(object):
                 self.sweep()
                 print(j)
             results[i] = self.measure_at_diff_times()
-        return(results)
-
-main()
+        return(results)"""
+#main()

@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from Stats import Stats
 
 class Gaussian(object):
     def __init__(self,epsilon, N_thermal, N_measurment, N_sweeps) -> None:
@@ -39,7 +40,7 @@ class Gaussian(object):
     
             self.sweep()
     
-    def measure(self, observable):
+    def Get_configurations(self):
     
         results = [0 for i in range(self.N_measurement)]
     
@@ -49,11 +50,11 @@ class Gaussian(object):
     
                 self.sweep()
         
-            results[i] = observable(self.lattice)
+            results[i] = self.lattice
     
         return(results)
     
-    def autocorrelation(self, observable):
+    """def autocorrelation(self, observable):
     
         n = 45
     
@@ -89,13 +90,19 @@ class Gaussian(object):
     
             results[step] = result 
     
-        return results
+        return results"""
 
 def main():
 
-    Gauss = Gaussian(epsilon=3,N_thermal=100,N_measurment=100000,N_sweeps=10)
+    Gauss = Gaussian(epsilon=1,N_thermal=100,N_measurment=10**4,N_sweeps=10)
 
-    print(Gauss.autocorrelation(lambda x: x))
+    a = Gauss.Get_configurations()
+    plt.hist(a,bins=2000)
+    plt.show()
+    Statistics = Stats(a)
+    
+    print(Statistics.estimate(lambda x: x,cutoff=10))
+
 
 main()
 
