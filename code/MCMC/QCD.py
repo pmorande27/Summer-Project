@@ -162,13 +162,33 @@ class Lattice(object):
             
     def generate_configurations(self):
         results = [0 for i in range(self.N_measurements)]
+
         for i in range(self.N_measurements):
             
             for j in range(self.N_corr):
+
                 self.sweep()
+
                 print(j)
+
             results[i] = self.U.copy()
+
         return(results)
+    
+    def generate_measurements(self, observable):
+
+        results = [0 for i in range(self.N_measurements)]
+
+        for i in range(self.N_measurements):
+
+            for j in range(self.N_corr):
+
+                self.sweep()
+
+            results[i] = observable(self.U)
+
+        return results
+    
     @staticmethod
     def get_plaquette(t,x,y,z, U):
 
