@@ -3,6 +3,7 @@ import random
 import math
 import matplotlib.pyplot as plt
 from scipy.ndimage import convolve,generate_binary_structure
+from Stats import Stats
 
 class Ising(object):
     def __init__(self, N, kT, N_thermal, N_measuremnt, N_sweeps) -> None:
@@ -100,6 +101,7 @@ class Ising(object):
         return results
         
 def main():
-    lat = Ising(N=50,kT=7,N_thermal=100,N_measuremnt=1000,N_sweeps=1)
-    print(lat.autocorrelation(Ising.get_energy))
+    lat = Ising(N=10,kT=7,N_thermal=100,N_measuremnt=100000,N_sweeps=1)
+    S = Stats(lat.measurement(Ising.get_magnetisation))
+    print(S.estimate(4))
 main()

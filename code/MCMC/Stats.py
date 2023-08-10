@@ -2,24 +2,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 class Stats(object):
 
-    def __init__(self, lattices) -> None:
+    def __init__(self, measurements) -> None:
 
-        self.lattices = lattices
+        self.measurements = measurements
 
     
-    def measure(self, observable):
-
-        return [observable(config) for config in self.lattices]
-    
-    def autocorrelation(self, observable, cutoff, plot= False):
+    def autocorrelation(self, cutoff, plot= False):
 
         steps = [i for i in range(cutoff)]
 
-        measurements = self.measure(observable=observable)
+        measurements = self.measurements
 
         average = np.average(measurements)
 
-        sigma_sq = np.var(measurements)
+        sigma_sq = np.var(measurements,ddof=1)
 
         #sigma_sq = (average_of_sq-average**2)
 
@@ -29,11 +25,11 @@ class Stats(object):
 
             result = 0
 
-            for i in range(len(self.lattices)-step):
+            for i in range(len(self.measurements)-step):
 
                 result += (measurements[i]-average)*(measurements[i+step]-average)
             
-            result = (result/(len(self.lattices)-step))/ sigma_sq
+            result = (result/(len(self.measurements)-step))/ sigma_sq
             
             results[step] = result 
         
@@ -45,29 +41,32 @@ class Stats(object):
         
         return results
         
-    def integrated_autoccorelation(self, observable, cutoff):
-        a = self.autocorrelation(observable=observable,cutoff=cutoff)[1:]
+    def integrated_autoccorelation(self, cutoff):
+        a = self.autocorrelation(cutoff=cutoff)[1:]
 
-        return 2*(1/2 + sum(self.autocorrelation(observable=observable,cutoff=cutoff)[1:]))
+        return 2*(1/2 + sum(self.autocorrelation(cutoff=cutoff)[1:]))
     
-    def estimate(self, observable, cutoff):
+    def estimate(self, cutoff):
 
-        measurements = self.measure(observable=observable)
-
+        measurements = self.measurements
         average = np.average(measurements)
 
         average_of_sq = np.average([m**2 for m in measurements])
 
-        sigma_sq = np.var(measurements)
+        sigma_sq = np.var(measurements,ddof=1)
 
-        integrated_autoccorelation = self.integrated_autoccorelation(observable=observable,cutoff=cutoff)
+        integrated_autoccorelation = self.integrated_autoccorelation(cutoff=cutoff)
 
         true_variance = sigma_sq*integrated_autoccorelation
 
-        error = np.sqrt(true_variance)
+        error = np.sqrt(true_variance/len(measurements))
 
         print(integrated_autoccorelation)
 
         return average, error
-
-
+    @staticmethod
+    def get_measurements(file_name, observable_name, observable):
+        lattices = np.load(file_name)
+        name = file_name.split('.')[0] + " " + observable_name
+        results = [observable(config) for config in lattices]
+        np.savetxt(name,results)

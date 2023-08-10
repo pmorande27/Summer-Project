@@ -8,7 +8,7 @@ def main():
     Nmeasure = 10
     Ncorr = 25
     N = 8
-    beta = 5.5
+    beta = 2
     N_matrix = 100
     epsilon = 0.24
     hits = 10
@@ -159,8 +159,7 @@ class Lattice(object):
 
             print(i)
 
-            print(Lattice.average_plaquette(self.U))
-
+            
     def generate_configurations(self):
         results = [0 for i in range(self.N_measurements)]
         for i in range(self.N_measurements):
@@ -232,55 +231,69 @@ class Lattice(object):
     
     @staticmethod
     def save_results(N, beta, N_thermal, N_meausre, N_correlation, hits, epsilon, N_matrix, lattices, file_name):
+
         file = open(file_name,'a')
+        
         file.write("########################"+ '\n')
+        
         file.write("Description:" + '\n')
+        
         file.write('The lattice has '+ str(N)+'**4 sites and beta is chosen to be ' + str(beta) + ' in this simulation'+ '\n')
+        
         file.write(str(N_thermal) + ' sweeps have been at the beginning to thermalize the lattice'+ '\n')
+        
         file.write(str(N_meausre) + ' Configurations of the lattice have been saved'+ '\n')
+        
         file.write(str(N_correlation)+ ' sweeps have been performed between each saved configuration to minimize the autocorrelation'+ '\n')
+        
         file.write('Each link is updated '+ str(hits) +' times each time that it is selected'+ '\n')
+        
         file.write('The parameter that controls the deviation form the identity matrix of the random SU(3) elements has been ' + str(epsilon) + ' in this simulation and ' + str(N_matrix) + ' random SU(3) matrices have been generated'+ '\n')
+        
         file.write("########################"+ '\n')
+        
         file.close()
+        
         np.save(file_name,lattices)
      
     
     
-    """def obtain_spatial_loops(self, t):
+    @staticmethod
+    def obtain_spatial_loops(t,lattice):
         WL =0
+        N = len(lattice)
+        ts = [t for t in range(N)]
 
-        for x in range(self.N_x):
-
-            for y in range(self.N_y):
-
-                for z in range(self.N_z):
-                     
-                    N =self.N 
+        for x in range(N):
+            
+            for y in range(N):
+                
+                for z in range(N):
 
                     incmi, incni =np.zeros((4),'int'), np.zeros((4),'int')
-                     
+                        
                     position = np.array([t, x, y, z])
+                    
                     for mi in range(1, 4):
 
                         incmi[mi] = 1 
+                        
                         pos_one = (position + incmi) %N
+                        
                         for ni in range(1,mi):
                             incni[ni]=1 
-                   
+                    
                             pos_two = (position + incni) %N 
 
                             incni[ni]=0
                 
-                            WL+=np.trace(np.dot(self.U[tuple(position)+(mi,)],np.dot(np.dot(self.U[tuple(pos_one)+(ni,)],Lattice.dagger(self.U[tuple(pos_two)+(mi,)])),Lattice.dagger(self.U[tuple(position)+(ni,)]))))
+                            WL+=np.trace(np.dot(lattice[tuple(position)+(mi,)],np.dot(np.dot(lattice[tuple(pos_one)+(ni,)],Lattice.dagger(lattice[tuple(pos_two)+(mi,)])),Lattice.dagger(lattice[tuple(position)+(ni,)]))))
                 
                         incmi[mi]=0
 
-
-
-        return (np.real(WL)/(3.*3))/self.N**3
+        return (np.real(WL)/(3.*3))
     
-
+    """
     def measure_at_diff_times(self):
 
         results = [0 for i in range(self.N_t)]
@@ -300,4 +313,3 @@ class Lattice(object):
                 print(j)
             results[i] = self.measure_at_diff_times()
         return(results)"""
-#main()
