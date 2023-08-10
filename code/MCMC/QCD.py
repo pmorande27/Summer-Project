@@ -276,7 +276,33 @@ class Lattice(object):
         
         np.save(file_name,lattices)
      
-    
+    @staticmethod
+    def save_measurements(N, beta, N_thermal, N_meausre, N_correlation, hits, epsilon, N_matrix, measurements, observable_name, file_name):
+        file = open(file_name,'a')
+        
+        file.write("########################"+ '\n')
+        
+        file.write("Description:" + '\n')
+
+        file.write('The Data file that comes with this one stores the measremts of the observable ' + observable_name+ ". The following lines give a breif desription of the simulation used to draw them.")
+        
+        file.write('The lattice has '+ str(N)+'**4 sites and beta is chosen to be ' + str(beta) + ' in this simulation'+ '\n')
+        
+        file.write(str(N_thermal) + ' sweeps have been at the beginning to thermalize the lattice'+ '\n')
+        
+        file.write(str(N_meausre) + ' Configurations of the lattice have been saved'+ '\n')
+        
+        file.write(str(N_correlation)+ ' sweeps have been performed between each saved configuration to minimize the autocorrelation'+ '\n')
+        
+        file.write('Each link is updated '+ str(hits) +' times each time that it is selected'+ '\n')
+        
+        file.write('The parameter that controls the deviation form the identity matrix of the random SU(3) elements has been ' + str(epsilon) + ' in this simulation and ' + str(N_matrix) + ' random SU(3) matrices have been generated'+ '\n')
+        
+        file.write("########################"+ '\n')
+        
+        file.close()
+        
+        np.save(file_name,measurements)
     
     @staticmethod
     def obtain_spatial_loops(t,lattice):
