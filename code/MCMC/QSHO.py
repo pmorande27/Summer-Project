@@ -1,22 +1,22 @@
 import numpy as np
 import random 
 import matplotlib.pyplot as plt
+from Stats import Stats
 def analytic(t, N, e):
     return 1/2*( np.exp(-t)+np.exp(t)*np.exp(-N))
 
 
 class Lattice(object):
-    def __init__(self, N, a, N_thermal, N_mc, N_correlation, Delta) -> None:
+    def __init__(self, N, a, N_thermal, N_measurement, N_sweeps, Delta) -> None:
         self.N_thermal = N_thermal
-        self.N_correlation = N_correlation
-        self.N_mc = N_mc
+        self.N_sweeps = N_sweeps
+        self.N_measurement = N_measurement
         self.a = a
         self.N = N
         self.Delta = Delta
         self.lattice = np.zeros(N)
         self.total_time = N*a
         self.sweeps = 0
-        self.accepted = 0
         self.thermalize()
     def sweep(self):
         for j in range(self.N):
@@ -34,71 +34,88 @@ class Lattice(object):
             probs = random.random()
             if probs < min(1, np.exp(-dS)):
                 self.lattice[pos] = candidate
-                self.accepted += 1
 
     def thermalize(self):
 
         for i in range(self.N_thermal):
             self.sweep()
-        self.accepted = 0
-
-    def measure_twopoint(self):
-
-        positions = [i for i in range(self.N)]
-        values = [[] for i in range(len(positions))]
-
-        for i in range(self.N_mc):
-            self.sweep()
-            print(i)
-            if self.sweeps % self.N_correlation == 0:
-                for i in range(len(positions)):
-                    values[i] += [self.lattice[0]*self.lattice[positions[i]]]
-            self.sweeps+=1
-
-        means = [np.mean(value) for value in values] + [np.mean(values[0])]
-        times = [position for position in positions] + [self.N]
-
-        return means,times
     
-    def measure_greens(self):
+    def Get_configurations(self):
+    
+        results = [0 for i in range(self.N_measurement)]
+    
+        for i in range(self.N_measurement):
+    
+            for j in range(self.N_sweeps):
+    
+                self.sweep()
+        
+            results[i] = self.lattice
+    
+        return(results)
+    
+    def generate_measurements(self, observable):
 
-        positions = [i for i in range(self.N)]
-        values = [[] for n in range(self.N)]
+        results = [0 for i in range(self.N_measurement)]
 
-        for i in range(self.N_mc):
-            self.sweep()
+        for i in range(self.N_measurement):
+
+            for j in range(self.N_sweeps):
+
+                self.sweep()
+
             print(i)
-            if self.sweeps % self.N_correlation == 0:
-                for n in range(self.N):
-                    values[n] += [1/self.N* sum([self.lattice[((j+n)%self.N)]* self.lattice[j] for j in range(self.N)])]
-            self.sweeps+=1
+            results[i] = observable(self.lattice)
 
-        means = [np.mean(value) for value in values] + [np.mean(values[0])]
-        times = [self.a*n for n in range(self.N)] + [self.N]
+        return results
 
-        return means,times
+    @staticmethod
+    def measure_twopoint(lattice):
+        N = len(lattice)
 
-    def measure_acceptance(self):
-        values = np.zeros(self.N_mc)
-        for i in range(self.N_mc):
-            self.sweep()
-            self.sweeps+=1
-            values[i] = float(self.accepted)/self.N
-            self.accepted = 0
-        return values,[i for i in range(1,self.N_mc+1)]
+        positions = [i for i in range(N)]
+        values = [0 for i in range(positions)]
+      
+        for i in range(len(positions)):
+            values[i] = lattice[0]*lattice[positions[i]]
 
+        return values
+    
+    @staticmethod    
+    def measure_greens(lattice):
 
+        N = len(lattice)
+        values = [0 for l in range(N)]
+
+        
+        for n in range(N):
+            values[n] = 1/N* sum([lattice[((j+n)%N)]* lattice[j] for j in range(N)])
+
+        
+
+        return values
+
+    @staticmethod
+    def measure_position(lattice):
+        return np.average(lattice)
+    @staticmethod
+    def measure_sq_position(lattice):
+        return np.average([x**2 for x in lattice])
 
 def main():
-    N = 100*2
-    a = 0.1
-    N_mc = 10**5*2
-    N_correlation = int(1/a**2)
-    N_thermal = N_correlation*10
+    N = 100
+    a = 1
+    N_measurements = 10**4
+    N_sweeps = 1
+    N_thermal = N_sweeps*10
     Delta = 1
-    lat = Lattice(N = N, a = a, N_thermal = N_thermal, N_mc = N_mc, N_correlation = N_correlation, Delta = Delta)
+    lat = Lattice(N = N, a = a, N_thermal = N_thermal, N_measurement = N_measurements, N_sweeps = N_sweeps, Delta = Delta)
+    a = lat.generate_measurements(Lattice.measure_sq_position)
+    print(np.average(a))
 
-    means,times = lat.measure_twopoint()
+    
+
+    """ means,times = lat.measure_twopoint()
     
     ts = np.linspace(start = 0, stop = N)
     corr = [analytic(t, N, a) for t in ts]
@@ -113,7 +130,7 @@ def main():
     #print(np.mean(values))
     #plt.scatter(times, values)
     #plt.show()
-
+"""
     
 main()
 
