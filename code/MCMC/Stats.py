@@ -61,7 +61,7 @@ class Stats(object):
 
         error = np.sqrt(true_variance/len(measurements))
 
-        print(integrated_autoccorelation)
+        #print(integrated_autoccorelation)
 
         return average, error
     @staticmethod
