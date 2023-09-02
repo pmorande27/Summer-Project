@@ -1,0 +1,7 @@
+########################
+Description:
+The Data file that comes with this one stores the measremts of the observable x^2. The following lines give a breif desription of the simulation used to draw them.The lattice has 100sites and a is chosen to be 0.3 in this simulation
+1000 sweeps have been at the beginning to thermalize the lattice
+100000 Configurations of the lattice have been saved
+1 sweeps have been performed between each saved configuration to minimize the autocorrelation
+########################
